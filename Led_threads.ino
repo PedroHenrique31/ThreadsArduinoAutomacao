@@ -26,20 +26,19 @@ void setup() {
 
 //Vamos colocar as threads porcas aqui:
 void threadR(){
-  valoresPinos[0]=random(0,256);
-  analogWrite(pinoR,valoresPinos[0]);
+  //valoresPinos[0]=random(0,256);
+  digitalWrite(pinoR,!digitalRead(pinoR));
 }
 void threadG(){
-  analogWrite(pinoG,valoresPinos[1]);
-  valoresPinos[1]=random(0,256);
+  digitalWrite(pinoG,!digitalRead(pinoG));
 }
 void threadB(){
-  analogWrite(pinoB,valoresPinos[2]);
-  valoresPinos[2]=random(0,256);
+  digitalWrite(pinoB,!digitalRead(pinoB));
 }
 
 void loop() {
   static int tempoUltimaMudanca[]={0,0,0};
+  // é meio estranho explicar, mas esse if aqui altera o valor do led A CADA TEMPO_R milisegundos.
   if(millis()-tempoUltimaMudanca[0] >= TEMPO_R)
     threadR();
   if(millis()-tempoUltimaMudanca[1] >= TEMPO_G)
