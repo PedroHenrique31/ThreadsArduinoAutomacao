@@ -1,6 +1,10 @@
 /*
   Autor: Pedro Henrique Cerneiro de Araújo        RA:22108287
   Autor: Bruna Stephanie Soares Gonçalves         RA:21707921
+
+  Obs: Essa biblioteca de controle de Threads precisa ser previamente instalada, e 
+  pode ser encontrada no github: https://github.com/ivanseidel/ArduinoThread
+
 */
 // inclui as bibliotecas de Thread
 #include "Thread.h"
