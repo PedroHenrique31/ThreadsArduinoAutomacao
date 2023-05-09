@@ -25,20 +25,27 @@ void setup() {
 }
 
 //Vamos colocar as threads porcas aqui:
-void threadR();
-void threadG();
-void threadB();
+void threadR(){
+  valoresPinos[0]=random(0,256);
+  analogWrite(pinoR,valoresPinos[0]);
+}
+void threadG(){
+  analogWrite(pinoG,valoresPinos[1]);
+  valoresPinos[1]=random(0,256);
+}
+void threadB(){
+  analogWrite(pinoB,valoresPinos[2]);
+  valoresPinos[2]=random(0,256);
+}
 
 void loop() {
-
-  analogWrite(pinoR,valoresPinos[0]);
-  analogWrite(pinoG,valoresPinos[1]);
-  analogWrite(pinoB,valoresPinos[2]);
-
-  valoresPinos[0]=random(0,256);
-  valoresPinos[1]=random(0,256);
-  valoresPinos[2]=random(0,256);
-
+  static int tempoUltimaMudanca[]={0,0,0};
+  if(millis()-tempoUltimaMudanca[0] >= TEMPO_R)
+    threadR();
+  if(millis()-tempoUltimaMudanca[1] >= TEMPO_G)
+    threadG();
+  if(millis()-tempoUltimaMudanca[2] >= TEMPO_B)
+    threadB();
   delay(500);
 
 }
