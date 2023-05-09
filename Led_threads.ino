@@ -2,6 +2,10 @@
   Autor: Pedro Henrique Cerneiro de Araújo        RA:22108287
   Autor: Bruna Stephanie Soares Gonçalves         RA:21707921
 */
+// inclui as bibliotecas de Thread
+#include "Thread.h"
+#include "ThreadController.h"
+
 
 // saídas analógicas para o Led
 #define pinoR 6
@@ -15,36 +19,46 @@ de uma forma meio porca.
 #define TEMPO_G 500
 #define TEMPO_B 300
 
+// Vamos criar as threads para cada led aqui
+ThreadController cpu;
+Thread threadLedR,threadLedG,threadLedB;
 
-int valoresPinos[]={128,199,64}; // Vetor com valores de cor para cada pino.
+// Vetor com valores de cor para cada pino.
+int valoresPinos[]={128,199,64}; 
 void setup() {
   pinMode(pinoR,OUTPUT);
   pinMode(pinoG,OUTPUT);
   pinMode(pinoB,OUTPUT);
+  // Marcamos quanto tempo em milissegundos queremos que a thread dure
+  threadLedR.setInterval(TEMPO_R);
+  threadLedG.setInterval(TEMPO_G);
+  threadLedG.setInterval(TEMPO_G);
+  //Marcamos aqui o que queremos que a thread faça quando estiver rodando.
+  threadLedR.onRun(funcaoR);
+  threadLedG.onRun(funcaoG);
+  threadLedB.onRun(funcaoB);
+  //Vamos adicionar as threads na lista de processos da CPU.
+  cpu.add(&threadLedR);
+  cpu.add(&threadLedG);
+  cpu.add(&threadLedB);
+
 
 }
 
 //Vamos colocar as threads porcas aqui:
-void threadR(){
+void funcaoR(){
   //valoresPinos[0]=random(0,256);
   digitalWrite(pinoR,!digitalRead(pinoR));
 }
-void threadG(){
+void funcaoG(){
   digitalWrite(pinoG,!digitalRead(pinoG));
 }
-void threadB(){
+void funcaoB(){
   digitalWrite(pinoB,!digitalRead(pinoB));
 }
 
 void loop() {
-  static int tempoUltimaMudanca[]={0,0,0};
-  // é meio estranho explicar, mas esse if aqui altera o valor do led A CADA TEMPO_R milisegundos.
-  if(millis()-tempoUltimaMudanca[0] >= TEMPO_R)
-    threadR();
-  if(millis()-tempoUltimaMudanca[1] >= TEMPO_G)
-    threadG();
-  if(millis()-tempoUltimaMudanca[2] >= TEMPO_B)
-    threadB();
-  delay(500);
 
+  cpu.run();
+  delay(300);
 }
